@@ -7,8 +7,6 @@ Projet : Détection de fraude à partir de l'historique de consommation
 # 1. Import des librairies de base
 import pandas as pd
 import numpy as np
-
-# (Optionnel pour plus tard : visualisation)
 import matplotlib.pyplot as plt
 
 # 2. Options d'affichage pour mieux lire les tableaux
@@ -16,7 +14,6 @@ pd.set_option("display.max_columns", None)
 pd.set_option("display.width", 200)
 
 # 3. Chemin du fichier à adapter à ton environnement
-# Exemple : r"C:\Users\TonNom\Documents\Dataset_ProjetML.xlsx"
 file_path = r"C:\Users\adamo\OneDrive\Documentos\IUA\Dataset_ProjetML.xlsx" # 
 
 # 4. Chargement du fichier Excel
@@ -180,21 +177,6 @@ print("Répartition des classes :", dict(zip(unique, counts)))
 print("Pourcentage de fraudeurs :", round(counts[1] / sum(counts) * 100, 2), "%")
 print("-" * 80)
 
-"""
-# ================================
-# ÉTAPE 3.4 - Rééquilibrage avec SMOTE
-# ================================
-
-from imblearn.over_sampling import SMOTE
-
-smote = SMOTE(random_state=42)
-X_resampled, y_resampled = smote.fit_resample(X_scaled, y)
-
-print("✅ Données après SMOTE :")
-print("X :", X_resampled.shape)
-print("y :", y_resampled.shape)
-print("-" * 80)
-"""
 # ================================
 # ÉTAPE 4.1 - Séparation Train / Test
 # ================================
@@ -206,7 +188,7 @@ X_train, X_test, y_train, y_test = train_test_split(
     y,
     test_size=0.2,          # 80% train, 20% test
     random_state=42,
-    stratify=y              # très important en cas de classes déséquilibrées
+    stratify=y              
 )
 
 print("Taille X_train :", X_train.shape)
