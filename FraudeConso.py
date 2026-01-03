@@ -444,3 +444,103 @@ plt.title("Courbes ROC - Détection de fraude")
 plt.legend()
 plt.tight_layout()
 plt.show()
+
+# ================================
+# ÉTAPE XGBOOST - Entraînement
+# ================================
+
+from xgboost import XGBClassifier
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+
+xgb_model = XGBClassifier(
+    n_estimators=300,
+    max_depth=6,
+    learning_rate=0.1,
+    subsample=0.8,
+    colsample_bytree=0.8,
+    objective="binary:logistic",
+    eval_metric="logloss",
+    random_state=42,
+    n_jobs=-1
+)
+
+xgb_model.fit(X_train_smote, y_train_smote)
+
+# Prédictions
+y_pred_xgb = xgb_model.predict(X_test)
+
+print("✅ MODÈLE : XGBOOST")
+print("Accuracy :", accuracy_score(y_test, y_pred_xgb))
+print("Matrice de confusion :\n", confusion_matrix(y_test, y_pred_xgb))
+print("\nRapport de classification :\n", classification_report(y_test, y_pred_xgb))
+print("-" * 80)
+
+from sklearn.metrics import roc_auc_score, roc_curve
+import matplotlib.pyplot as plt
+
+# Probabilités
+y_proba_xgb = xgb_model.predict_proba(X_test)[:, 1]
+
+# AUC
+auc_xgb = roc_auc_score(y_test, y_proba_xgb)
+print("AUC XGBoost :", auc_xgb)
+
+# Courbe ROC
+fpr_xgb, tpr_xgb, _ = roc_curve(y_test, y_proba_xgb)
+
+plt.figure()
+plt.plot(fpr_xgb, tpr_xgb, label="XGBoost (AUC = {:.3f})".format(auc_xgb))
+plt.plot([0, 1], [0, 1], linestyle="--")
+plt.xlabel("Taux de faux positifs")
+plt.ylabel("Taux de vrais positifs")
+plt.title("Courbe ROC - XGBoost")
+plt.legend()
+plt.tight_layout()
+plt.show()
+
+# Récupération des noms des variables
+feature_names = X.columns
+
+# Importance des variables selon XGBoost
+xgb_importances = xgb_model.feature_importances_
+
+# DataFrame des importances
+df_xgb_importances = pd.DataFrame({
+    "Variable": feature_names,
+    "Importance": xgb_importances
+}).sort_values(by="Importance", ascending=False)
+
+top10_xgb = df_xgb_importances.head(10)
+
+print(top10_xgb)
+import matplotlib.pyplot as plt
+
+plt.figure()
+plt.barh(top10_xgb["Variable"], top10_xgb["Importance"])
+plt.gca().invert_yaxis()  # Variable la plus importante en haut
+plt.xlabel("Importance")
+plt.title("Top 10 des variables les plus importantes – XGBoost")
+plt.tight_layout()
+plt.show()
+
+
+
+# Matrice de confusion XGBoost
+cm_xgb = np.array([[1743, 345],
+                   [487, 1868]])
+
+plt.figure()
+plt.imshow(cm_xgb)
+plt.title("Matrice de confusion – XGBoost")
+plt.xlabel("Classe prédite")
+plt.ylabel("Classe réelle")
+plt.colorbar()
+
+# Ajout des valeurs dans les cellules
+for i in range(cm_xgb.shape[0]):
+    for j in range(cm_xgb.shape[1]):
+        plt.text(j, i, cm_xgb[i, j],
+                 ha="center", va="center")
+
+plt.tight_layout()
+plt.show()
