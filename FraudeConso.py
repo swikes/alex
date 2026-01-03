@@ -19,7 +19,7 @@ file_path = r"C:\Users\adamo\OneDrive\Documentos\IUA\Dataset_ProjetML.xlsx" #
 # 4. Chargement du fichier Excel
 df = pd.read_excel(file_path, sheet_name="Sheet1")
 
-print("✅ Données chargées avec succès")
+print("Données chargées avec succès")
 print("-" * 80)
 
 # 5. Taille du dataset
@@ -48,7 +48,7 @@ if "FRAUDEUR" in df.columns:
     print("\nDistribution relative (en %) :")
     print(round(df["FRAUDEUR"].value_counts(normalize=True) * 100, 2))
 else:
-    print("⚠️ Attention : la colonne 'FRAUDEUR' n'existe pas dans le dataset.")
+    print("Attention : la colonne 'FRAUDEUR' n'existe pas dans le dataset.")
 
 print("-" * 80)
 
@@ -167,7 +167,7 @@ print("-" * 80)
 scaler = StandardScaler()
 X_scaled = scaler.fit_transform(X)
 
-print("✅ Normalisation terminée")
+print("Normalisation terminée")
 print("Shape de X_scaled :", X_scaled.shape)
 print("-" * 80)
 
@@ -230,7 +230,7 @@ log_model.fit(X_train_smote, y_train_smote)
 y_pred_log = log_model.predict(X_test)
 
 # Évaluation
-print("✅ MODÈLE : RÉGRESSION LOGISTIQUE")
+print("MODÈLE : RÉGRESSION LOGISTIQUE")
 print("Accuracy :", accuracy_score(y_test, y_pred_log))
 print("Matrice de confusion :\n", confusion_matrix(y_test, y_pred_log))
 print("\nRapport de classification :\n", classification_report(y_test, y_pred_log))
@@ -256,7 +256,7 @@ rf_model.fit(X_train_smote, y_train_smote)
 y_pred_rf = rf_model.predict(X_test)
 
 # Évaluation
-print("✅ MODÈLE : RANDOM FOREST")
+print("MODÈLE : RANDOM FOREST")
 print("Accuracy :", accuracy_score(y_test, y_pred_rf))
 print("Matrice de confusion :\n", confusion_matrix(y_test, y_pred_rf))
 print("\nRapport de classification :\n", classification_report(y_test, y_pred_rf))
@@ -469,7 +469,7 @@ xgb_model.fit(X_train_smote, y_train_smote)
 # Prédictions
 y_pred_xgb = xgb_model.predict(X_test)
 
-print("✅ MODÈLE : XGBOOST")
+print("MODÈLE : XGBOOST")
 print("Accuracy :", accuracy_score(y_test, y_pred_xgb))
 print("Matrice de confusion :\n", confusion_matrix(y_test, y_pred_xgb))
 print("\nRapport de classification :\n", classification_report(y_test, y_pred_xgb))
@@ -544,3 +544,4 @@ for i in range(cm_xgb.shape[0]):
 
 plt.tight_layout()
 plt.show()
+
